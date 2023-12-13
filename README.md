@@ -1,3 +1,9 @@
+## Install and run
+```
+git clone https://github.com/leosol/androbash
+bash get-packages.sh
+```
+
 ## Andro-Bash - Scripts for Android ADB
 
 The following image shows the expected output which is basically information about the installed packages, packages that are third party and packages that are not from Google Play.
