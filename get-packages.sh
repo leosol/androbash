@@ -1,5 +1,10 @@
+
+
 mkdir ./output/
 cd ./output/
+rm -rf APK
+
+mkdir APK
 
 rm packages.txt
 rm packages.sh
@@ -7,6 +12,7 @@ rm hidden-packages.txt
 rm disabled-packages.txt
 rm third-party-packages.txt
 rm third-party-not-google-play.txt
+rm get-apks.sh
 
 adb shell dumpsys package|grep 'Package \['|cut -d [ -f 2|cut -d ] -f 1 > packages.txt
 
@@ -20,6 +26,15 @@ adb shell pm list packages -3 -i|grep -vi com.android.vending > third-party-not-
 
 echo "">packages.sh
 echo "">install-dates.txt
+
+cat packages.txt | while read line;
+do
+   #echo $line
+   pkg_path=` adb shell pm path $line < /dev/null|head -1|cut -d ':' -f 2 `;
+   #echo "Script to download $line";
+   echo "adb pull $pkg_path ./APK/$line.apk;" >> get-apks.sh
+done
+
 cat packages.txt | while read line
 do
    echo $line
@@ -29,7 +44,16 @@ done
 
 echo "cat install-dates.txt|grep lastUpdateTime|cut -d = -f 2|cut -d ' ' -f 1|sort|uniq -c > lastUpdateTimes.txt" >> packages.sh
 echo "cat install-dates.txt|grep firstInstallTime|cut -d = -f 2|cut -d ' ' -f 1|sort|uniq -c > firstInstallTime.txt" >> packages.sh
-sh packages.sh
+bash packages.sh
+
+printf 'Is this a good question (y/n)? '
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then 
+    bash get-apks.sh;
+else
+    echo "Skipping..."
+fi
+
 cd ..
 
 
