@@ -46,7 +46,7 @@ echo "cat install-dates.txt|grep lastUpdateTime|cut -d = -f 2|cut -d ' ' -f 1|so
 echo "cat install-dates.txt|grep firstInstallTime|cut -d = -f 2|cut -d ' ' -f 1|sort|uniq -c > firstInstallTime.txt" >> packages.sh
 bash packages.sh
 
-printf 'Is this a good question (y/n)? '
+printf 'download apks (y/n)? '
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then 
     bash get-apks.sh;
